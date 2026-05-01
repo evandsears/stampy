@@ -1,10 +1,10 @@
-{
-  "projectId": "gen-lang-client-0272092328",
-  "appId": "1:253984378372:web:6a41aea0e25384723b6f51",
-  "apiKey": "AIzaSyDuEu4e6onUxhTf6nT1XSEydn2ol-pMyvY",
-  "authDomain": "gen-lang-client-0272092328.firebaseapp.com",
-  "firestoreDatabaseId": "ai-studio-84dd1c03-7c0b-4d18-bace-b8e1bf408cf7",
-  "storageBucket": "gen-lang-client-0272092328.firebasestorage.app",
-  "messagingSenderId": "253984378372",
-  "measurementId": ""
-}
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyBq-Vdlzu11VDoappXTJRw_frKIxz5Ig0w",
+  authDomain: "gen-lang-client-0551427225.firebaseapp.com",
+  projectId: "gen-lang-client-0551427225",
+  storageBucket: "gen-lang-client-0551427225.firebasestorage.app",
+  messagingSenderId: "579074053672",
+  appId: "1:579074053672:web:6114b80b8d476ab6ce071d",
+  measurementId: "G-DZMJPYRZEZ"
+};
