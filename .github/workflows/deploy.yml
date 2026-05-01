@@ -18,4 +18,4 @@ jobs:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}'
           channelId: live
-          projectId: YOUR_PROJECT_ID_HERE # Double check this is your actual Project ID!
+          projectId: gen-lang-client-0551427225 # Double check this is your actual Project ID!
