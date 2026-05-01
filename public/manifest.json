@@ -5,6 +5,25 @@
   "display": "standalone",
   "background_color": "#fdfbf7",
   "theme_color": "#855268",
+  "id": "/?source=pwa",
+  "orientation": "portrait",
+  "description": "A cozy photo app to cut out and collect one stamp-shaped memory per day.",
+  "screenshots": [
+  {
+    "src": "/screenshot-mobile.png",
+    "sizes": "1080x1920",
+    "type": "image/png",
+    "form_factor": "narrow",
+    "label": "App in action"
+  },
+  {
+    "src": "/screenshot-desktop.png",
+    "sizes": "1920x1080",
+    "type": "image/png",
+    "form_factor": "wide",
+    "label": "Desktop version"
+  }
+],
   "icons": [
     {
       "src": "/favicon.svg",
