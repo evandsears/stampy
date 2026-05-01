@@ -1,0 +1,72 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 0. Global Safety Net
+    match /{document=**} { allow read, write: if false; }
+    
+    // Globals
+    function isSignedIn() { return request.auth != null && request.auth.token.email_verified == true; }
+    function incoming() { return request.resource.data; }
+    function existing() { return resource.data; }
+    function isValidId(id) { return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); }
+    
+    function isValidUserPrimary(data) {
+      return data.keys().hasAll(['uid', 'createdAt'])
+        && data.keys().size() == 2
+        && data.uid == request.auth.uid
+        && data.uid is string && data.uid.size() <= 128
+        && data.createdAt == request.time;
+    }
+    
+    function isValidStamp(data) {
+      // Optional isHolographic boolean support
+      let hasHolo = data.keys().hasAny(['isHolographic']);
+      let baseLength = 6;
+      let targetLength = hasHolo ? baseLength + 1 : baseLength;
+      
+      let baseKeysValid = data.keys().hasAll(['userId', 'date', 'imageDataUrl', 'journalEntry', 'createdAt', 'updatedAt'])
+        && data.keys().size() == targetLength
+        && data.userId == request.auth.uid
+        && data.userId is string && data.userId.size() <= 128
+        && data.date is string && data.date.size() <= 20
+        && data.imageDataUrl is string && data.imageDataUrl.size() <= 1048400
+        && data.journalEntry is string && data.journalEntry.size() <= 50000;
+        
+      return baseKeysValid && (!hasHolo || data.isHolographic is bool);
+    }
+
+    match /users/{userId} {
+      function isOwner() { return isSignedIn() && request.auth.uid == userId; }
+      
+      allow read: if isOwner();
+      allow create: if isOwner() 
+        && isValidId(userId)
+        && isValidUserPrimary(incoming());
+      allow update: if false; 
+      allow delete: if false;
+      
+      match /stamps/{stampId} {
+        allow get: if isOwner() && (resource == null || existing().userId == request.auth.uid);
+        allow list: if isOwner() && existing().userId == request.auth.uid;
+        
+        allow create: if isOwner()
+          && isValidId(stampId)
+          && isValidStamp(incoming())
+          && incoming().createdAt == request.time
+          && incoming().updatedAt == request.time;
+          
+        allow update: if isOwner()
+          && isValidId(stampId)
+          && isValidStamp(incoming())
+          && incoming().userId == existing().userId
+          && incoming().createdAt == existing().createdAt
+          && incoming().date == existing().date
+          && incoming().imageDataUrl == existing().imageDataUrl
+          && incoming().updatedAt == request.time
+          && incoming().diff(existing()).affectedKeys().hasOnly(['journalEntry', 'updatedAt']);
+          
+        allow delete: if isOwner() && (resource == null || existing().userId == request.auth.uid);
+      }
+    }
+  }
+}

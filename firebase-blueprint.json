@@ -1,0 +1,38 @@
+{
+  "entities": {
+    "UserPrimary": {
+      "title": "User",
+      "description": "Primary user document.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["uid", "createdAt"]
+    },
+    "Stamp": {
+      "title": "Stamp",
+      "description": "A single daily stamp for a user.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "date": { "type": "string" },
+        "imageDataUrl": { "type": "string" },
+        "journalEntry": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["userId", "date", "imageDataUrl", "journalEntry", "createdAt", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserPrimary" },
+      "description": "User profile records."
+    },
+    "/users/{userId}/stamps/{stampId}": {
+      "schema": { "$ref": "#/entities/Stamp" },
+      "description": "Stamps collected by the user."
+    }
+  }
+}
