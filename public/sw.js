@@ -3,7 +3,7 @@ const ASSETS = [
   '/',
   '/index.html',
   '/manifest.json',
-  '/icons/icon-192x192.png'
+  '/icons/android/launchericon-192x192.png'
 ];
 
 // Install the service worker and cache assets
