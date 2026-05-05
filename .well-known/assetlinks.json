@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "com.evandsears.stampy",
+        "sha256_cert_fingerprints": ["C1:66:11:E1:01:9B:8A:66:7F:C2:72:DA:9F:7F:D7:38:20:7B:02:1F:9F:70:1D:26:6F:A6:40:7C:08:00:93:86"]
+      }
+    }]
