@@ -50,3 +50,8 @@ export default defineConfig(({mode}) => {
     },
   };
 });
+export default defineConfig({
+  // ... existing config
+  publicDir: 'public',
+  // ... 
+});
