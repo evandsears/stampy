@@ -17,6 +17,19 @@
     ],
     "headers": [
       {
+        "source": "/assetlinks.json",
+        "headers": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Access-Control-Allow-Origin",
+            "value": "*"
+          }
+        ]
+      },
+      {
         "source": "/.well-known/assetlinks.json",
         "headers": [
           {
@@ -30,7 +43,7 @@
         ]
       },
       {
-        "source": "**",
+        "source": "**/!(*assetlinks.json)",
         "headers": [
           {
             "key": "Cross-Origin-Opener-Policy",
