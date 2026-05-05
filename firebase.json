@@ -1,6 +1,17 @@
 {
   "hosting": {
     "public": "dist",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ],
     "headers": [
       {
         "source": "**",
@@ -10,12 +21,15 @@
             "value": "same-origin-allow-popups"
           }
         ]
-      }
-    ],
-    "rewrites": [
+      },
       {
-        "source": "**",
-        "destination": "/index.html"
+        "source": "/.well-known/assetlinks.json",
+        "headers": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ]
       }
     ]
   }
