@@ -2,29 +2,20 @@
   "hosting": {
     "public": "dist",
     "ignore": [
-  "firebase.json",
-  "**/node_modules/**"
-],
+      "firebase.json",
+      "**/node_modules/**"
+    ],
     "rewrites": [
-  {
-    "source": "/.well-known/assetlinks.json",
-    "destination": "/.well-known/assetlinks.json"
-  },
-  {
-    "source": "**",
-    "destination": "/index.html"
-  }
-],
-    "headers": [
+      {
+        "source": "/.well-known/assetlinks.json",
+        "destination": "/well-known/assetlinks.json"
+      },
       {
         "source": "**",
-        "headers": [
-          {
-            "key": "Cross-Origin-Opener-Policy",
-            "value": "same-origin-allow-popups"
-          }
-        ]
-      },
+        "destination": "/index.html"
+      }
+    ],
+    "headers": [
       {
         "source": "/.well-known/assetlinks.json",
         "headers": [
