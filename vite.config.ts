@@ -35,6 +35,7 @@ export default defineConfig(({mode}) => {
         }
       })
     ],
+    publicDir: 'public',
     define: {
       'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
     },
@@ -50,8 +51,4 @@ export default defineConfig(({mode}) => {
     },
   };
 });
-export default defineConfig({
-  // ... existing config
-  publicDir: 'public',
-  // ... 
-});
+
