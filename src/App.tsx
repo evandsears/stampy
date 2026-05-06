@@ -188,37 +188,45 @@ export default function App() {
     </header>
   );
 
-  const BottomNav = () => {
-    if (view === 'creating') return null;
+ const BottomNav = () => {
+  if (view === 'creating') return null;
 
-    return (
-      <div className="fixed bottom-0 left-0 right-0 max-w-md mx-auto z-40">
-        <div className="absolute inset-0 bg-gradient-to-t from-surface via-surface/90 to-transparent pointer-events-none h-24 bottom-0 top-auto" />
-        <div className="bg-surface-container/90 backdrop-blur-md border border-on-surface/5 mx-2 mb-6 rounded-full p-1.5 flex items-center justify-around shadow-xl relative z-10 text-on-surface/60 gap-1">
-          <button
-            onClick={() => setView('home')}
-            className={cn(
-               "flex-1 py-3 px-2 rounded-full flex flex-col items-center gap-1 transition-all duration-300",
-               activeTab === 'home' ? "bg-primary text-on-primary font-bold shadow-md scale-100" : "hover:bg-on-surface/5 hover:text-on-surface font-medium"
-            )}
-          >
-            <div className="w-6 h-6 border-2 border-current rounded-sm border-dashed opacity-80" />
-            <span className="text-xs">Today</span>
-          </button>
-          <button
-            onClick={() => setView('gallery')}
-            className={cn(
-               "flex-1 py-3 px-2 rounded-full flex flex-col items-center gap-1 transition-all duration-300",
-               activeTab === 'gallery' ? "bg-primary text-on-primary font-bold shadow-md scale-100" : "hover:bg-on-surface/5 hover:text-on-surface font-medium"
-            )}
-          >
-            <BookImage className="w-6 h-6 opacity-80" />
-            <span className="text-xs">Gallery</span>
-          </button>
+  return (
+    <div className="fixed bottom-0 left-0 right-0 max-w-md mx-auto z-40">
+      {/* 1. The AdMob Banner sits on top of the nav buttons */}
+      <div className="w-full flex justify-center bg-surface pb-2 pt-2 border-t border-on-surface/5">
+        <div className="w-[320px] h-[50px] bg-on-surface/5 rounded flex items-center justify-center border border-on-surface/10 border-dashed">
+          <span className="text-on-surface/40 text-xs font-mono">AdMob Banner Space</span>
         </div>
       </div>
-    );
-  };
+
+      {/* 2. Your existing Navigation Bar */}
+      <div className="absolute inset-0 bg-gradient-to-t from-surface via-surface/90 to-transparent pointer-events-none h-24 bottom-0 top-auto" />
+      <div className="bg-surface-container/90 backdrop-blur-md border border-on-surface/5 mx-2 mb-6 rounded-full p-1.5 flex items-center justify-around shadow-xl relative z-10 text-on-surface/60 gap-1">
+        <button
+          onClick={() => setView('home')}
+          className={cn(
+             "flex-1 py-3 px-2 rounded-full flex flex-col items-center gap-1 transition-all duration-300",
+             activeTab === 'home' ? "bg-primary text-on-primary font-bold shadow-md scale-100" : "hover:bg-on-surface/5 hover:text-on-surface font-medium"
+          )}
+        >
+          <div className="w-6 h-6 border-2 border-current rounded-sm border-dashed opacity-80" />
+          <span className="text-xs">Today</span>
+        </button>
+        <button
+          onClick={() => setView('gallery')}
+          className={cn(
+             "flex-1 py-3 px-2 rounded-full flex flex-col items-center gap-1 transition-all duration-300",
+             activeTab === 'gallery' ? "bg-primary text-on-primary font-bold shadow-md scale-100" : "hover:bg-on-surface/5 hover:text-on-surface font-medium"
+          )}
+        >
+          <BookImage className="w-6 h-6 opacity-80" />
+          <span className="text-xs">Gallery</span>
+        </button>
+      </div>
+    </div>
+  );
+};
 
   if (isLoading) {
     return (
