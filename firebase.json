@@ -1,8 +1,6 @@
 {
   "hosting": {
     "public": "dist",
-    "cleanUrls": false,
-    "trailingSlash": false,
     "ignore": [
       "firebase.json",
       "**/node_modules/**"
@@ -19,14 +17,14 @@
     ],
     "headers": [
       {
-        "source": "/.well-known/assetlinks.json",
+        "source": "/assetlinks.json",
         "headers": [
           { "key": "Content-Type", "value": "application/json" },
           { "key": "Access-Control-Allow-Origin", "value": "*" }
         ]
       },
       {
-        "source": "/assetlinks.json",
+        "source": "/.well-known/assetlinks.json",
         "headers": [
           { "key": "Content-Type", "value": "application/json" },
           { "key": "Access-Control-Allow-Origin", "value": "*" }
