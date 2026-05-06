@@ -336,12 +336,12 @@ export default function StampView({ stamp, isToday, onDelete, initialExpanded, e
                    )}>
                      {stamp.journalEntry || "No journal entry for this memory."}
                    </p>
-                   <button 
-                     onClick={() => setIsEditingJournal(true)}
-                     className="absolute -top-4 -right-4 p-3 bg-primary text-on-primary rounded-full hover:scale-110 active:scale-95 transition-all opacity-0 group-hover:opacity-100 shadow-md"
-                   >
-                     <PenLine className="w-4 h-4" />
-                   </button>
+<button 
+  onClick={() => setIsEditingJournal(true)}
+  className="absolute -top-4 -right-4 p-3 bg-primary text-on-primary rounded-full hover:scale-110 active:scale-95 transition-all opacity-100 md:opacity-0 md:group-hover:opacity-100 shadow-md"
+>
+  <PenLine className="w-4 h-4" />
+</button>
                 </div>
               ) : (
                 <motion.div 
