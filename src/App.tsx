@@ -29,20 +29,29 @@ export default function App() {
   const todaysStamp = stamps.find(s => s.date === todayStr);
   const pastStamps = stamps.filter(s => s.date !== todayStr).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
-  useEffect(() => {
-    const unsub = onAuthStateChanged(auth, async (u) => {
-      setUser(u);
-      
-      if (u) {
-        await syncLocalStampsToCloud();
-      }
-      
-      const data = await getStamps();
-      setStamps(data);
-      setIsLoading(false);
-    });
-    return unsub;
-  }, []);
+ useEffect(() => {
+  // 1. Instant Load: Grab whatever is on the phone RIGHT NOW
+  const loadLocalData = async () => {
+    const data = await getStamps();
+    setStamps(data);
+    setIsLoading(false); // The spinner disappears almost instantly
+  };
+
+  loadLocalData();
+
+  // 2. Background Sync: Handle the user login and cloud sync quietly
+  const unsub = onAuthStateChanged(auth, async (u) => {
+    setUser(u);
+    if (u) {
+      await syncLocalStampsToCloud();
+      // 3. Update UI: If the cloud had new stamps, they'll "pop" in now
+      const freshData = await getStamps();
+      setStamps(freshData);
+    }
+  });
+
+  return unsub;
+}, []);
 
   const handleCreateComplete = async (imageDataUrl: string) => {
     // Show flying animation immediately over home
