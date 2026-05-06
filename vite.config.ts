@@ -11,7 +11,7 @@ export default defineConfig(({mode}) => {
       react(), 
       tailwindcss(),
       VitePWA({
-        registerType: 'autoUpdate',
+        registerType: 'prompt',
         // We added 'assetlinks.json' to this list to make sure Vite includes it in the build
         includeAssets: ['favicon.svg', 'apple-touch-icon.png', 'masked-icon.svg', 'assetlinks.json'],
         manifest: {
