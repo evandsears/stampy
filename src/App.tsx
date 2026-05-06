@@ -13,6 +13,7 @@ import { BookImage, Plus, ArrowLeft, Loader2, User as UserIcon, LogOut } from 'l
 import { cn } from './lib/utils';
 import { auth, signInWithGoogle, signOut } from './lib/firebase';
 import { onAuthStateChanged, User } from 'firebase/auth';
+import AdBanner from './components/AdBanner';
 
 type ViewState = 'home' | 'creating' | 'gallery' | 'view_stamp';
 
@@ -29,29 +30,29 @@ export default function App() {
   const todaysStamp = stamps.find(s => s.date === todayStr);
   const pastStamps = stamps.filter(s => s.date !== todayStr).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
- useEffect(() => {
-  // 1. Instant Load: Grab whatever is on the phone RIGHT NOW
-  const loadLocalData = async () => {
-    const data = await getStamps();
-    setStamps(data);
-    setIsLoading(false); // The spinner disappears almost instantly
-  };
+  useEffect(() => {
+    // 1. Instant Load: Grab whatever is on the phone RIGHT NOW
+    const loadLocalData = async () => {
+      const data = await getStamps();
+      setStamps(data);
+      setIsLoading(false); // The spinner disappears almost instantly
+    };
 
-  loadLocalData();
+    loadLocalData();
 
-  // 2. Background Sync: Handle the user login and cloud sync quietly
-  const unsub = onAuthStateChanged(auth, async (u) => {
-    setUser(u);
-    if (u) {
-      await syncLocalStampsToCloud();
-      // 3. Update UI: If the cloud had new stamps, they'll "pop" in now
-      const freshData = await getStamps();
-      setStamps(freshData);
-    }
-  });
+    // 2. Background Sync: Handle the user login and cloud sync quietly
+    const unsub = onAuthStateChanged(auth, async (u) => {
+      setUser(u);
+      if (u) {
+        await syncLocalStampsToCloud();
+        // 3. Update UI: If the cloud had new stamps, they'll "pop" in now
+        const freshData = await getStamps();
+        setStamps(freshData);
+      }
+    });
 
-  return unsub;
-}, []);
+    return unsub;
+  }, []);
 
   const handleCreateComplete = async (imageDataUrl: string) => {
     // Show flying animation immediately over home
@@ -84,7 +85,7 @@ export default function App() {
     await deleteStamp(id);
     setStamps(await getStamps());
     if (view === 'view_stamp') {
-      setView('gallery'); // or home if it's today's stamp, but gallery is safer or we can check
+      setView('gallery'); 
     }
   };
 
@@ -197,45 +198,41 @@ export default function App() {
     </header>
   );
 
- const BottomNav = () => {
-  if (view === 'creating') return null;
+  const BottomNav = () => {
+    if (view === 'creating') return null;
 
-  return (
-    <div className="fixed bottom-0 left-0 right-0 max-w-md mx-auto z-40">
-      {/* 1. The AdMob Banner sits on top of the nav buttons */}
-      <div className="w-full flex justify-center bg-surface pb-2 pt-2 border-t border-on-surface/5">
-        <div className="w-[320px] h-[50px] bg-on-surface/5 rounded flex items-center justify-center border border-on-surface/10 border-dashed">
-          <span className="text-on-surface/40 text-xs font-mono">AdMob Banner Space</span>
+    return (
+      <div className="fixed bottom-0 left-0 right-0 max-w-md mx-auto z-40">
+        {/* The Live AdBanner now sits here, using your Ad Unit ID */}
+        <AdBanner adSlot="ca-app-pub-5109081999190590/2485759813" />
+
+        {/* Your existing Navigation Bar */}
+        <div className="absolute inset-0 bg-gradient-to-t from-surface via-surface/90 to-transparent pointer-events-none h-24 bottom-0 top-auto" />
+        <div className="bg-surface-container/90 backdrop-blur-md border border-on-surface/5 mx-2 mb-6 rounded-full p-1.5 flex items-center justify-around shadow-xl relative z-10 text-on-surface/60 gap-1">
+          <button
+            onClick={() => setView('home')}
+            className={cn(
+               "flex-1 py-3 px-2 rounded-full flex flex-col items-center gap-1 transition-all duration-300",
+               activeTab === 'home' ? "bg-primary text-on-primary font-bold shadow-md scale-100" : "hover:bg-on-surface/5 hover:text-on-surface font-medium"
+            )}
+          >
+            <div className="w-6 h-6 border-2 border-current rounded-sm border-dashed opacity-80" />
+            <span className="text-xs">Today</span>
+          </button>
+          <button
+            onClick={() => setView('gallery')}
+            className={cn(
+               "flex-1 py-3 px-2 rounded-full flex flex-col items-center gap-1 transition-all duration-300",
+               activeTab === 'gallery' ? "bg-primary text-on-primary font-bold shadow-md scale-100" : "hover:bg-on-surface/5 hover:text-on-surface font-medium"
+            )}
+          >
+            <BookImage className="w-6 h-6 opacity-80" />
+            <span className="text-xs">Gallery</span>
+          </button>
         </div>
       </div>
-
-      {/* 2. Your existing Navigation Bar */}
-      <div className="absolute inset-0 bg-gradient-to-t from-surface via-surface/90 to-transparent pointer-events-none h-24 bottom-0 top-auto" />
-      <div className="bg-surface-container/90 backdrop-blur-md border border-on-surface/5 mx-2 mb-6 rounded-full p-1.5 flex items-center justify-around shadow-xl relative z-10 text-on-surface/60 gap-1">
-        <button
-          onClick={() => setView('home')}
-          className={cn(
-             "flex-1 py-3 px-2 rounded-full flex flex-col items-center gap-1 transition-all duration-300",
-             activeTab === 'home' ? "bg-primary text-on-primary font-bold shadow-md scale-100" : "hover:bg-on-surface/5 hover:text-on-surface font-medium"
-          )}
-        >
-          <div className="w-6 h-6 border-2 border-current rounded-sm border-dashed opacity-80" />
-          <span className="text-xs">Today</span>
-        </button>
-        <button
-          onClick={() => setView('gallery')}
-          className={cn(
-             "flex-1 py-3 px-2 rounded-full flex flex-col items-center gap-1 transition-all duration-300",
-             activeTab === 'gallery' ? "bg-primary text-on-primary font-bold shadow-md scale-100" : "hover:bg-on-surface/5 hover:text-on-surface font-medium"
-          )}
-        >
-          <BookImage className="w-6 h-6 opacity-80" />
-          <span className="text-xs">Gallery</span>
-        </button>
-      </div>
-    </div>
-  );
-};
+    );
+  };
 
   if (isLoading) {
     return (
@@ -249,7 +246,6 @@ export default function App() {
     <div 
       className="min-h-screen flex flex-col font-sans max-w-md mx-auto bg-surface"
       onClick={(e) => {
-        // Simple way to close profile menu when clicked outside
         if (showProfileMenu && !(e.target as Element).closest('.relative')) {
           setShowProfileMenu(false);
         }
@@ -416,7 +412,6 @@ export default function App() {
           </motion.div>
         </motion.div>
       )}
-
 
       <BottomNav />
     </div>
