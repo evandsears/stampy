@@ -71,15 +71,14 @@
 .holo-effect {
   background: linear-gradient(
     115deg,
-    transparent 15%,
-    rgba(255, 113, 206, 0.7) 25%,
-    rgba(1, 205, 254, 0.7) 35%,
-    rgba(5, 255, 161, 0.7) 45%,
-    rgba(185, 103, 255, 0.7) 55%,
-    rgba(255, 251, 150, 0.7) 65%,
-    transparent 75%
+    transparent 10%,
+    rgba(255, 113, 206, 0.9) 30%,
+    rgba(1, 205, 254, 0.9) 50%,
+    rgba(185, 103, 255, 0.9) 70%,
+    transparent 90%
   );
-  background-size: 300% 300%;
-  animation: holo-shine 6s ease-in-out infinite;
-  mix-blend-mode: color-dodge;
+  background-size: 200% 200%;
+  animation: holo-shine 4s ease-in-out infinite; /* Slower, smoother swipe */
+  mix-blend-mode: screen; /* Changed from color-dodge to be visible on black */
+  pointer-events: none;
 }
