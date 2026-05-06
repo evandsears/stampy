@@ -408,16 +408,6 @@ export default function App() {
         </motion.div>
       )}
 
-      {/* Google AdMob Banner Placeholder */}
-      {view !== 'creating' && (
-        <div className="w-full flex justify-center bg-surface pb-2 pt-2 border-t border-on-surface/5 z-40 relative">
-          <div className="w-[320px] h-[50px] bg-on-surface/5 rounded flex items-center justify-center border border-on-surface/10 border-dashed">
-            <span className="text-on-surface/40 text-xs font-mono">AdMob Banner Space</span>
-            {/* The actual tag will look something like this when you swap in IDs: */}
-            {/* <ins className="adsbygoogle" style={{ display: 'inline-block', width: '320px', height: '50px' }} data-ad-client="ca-pub-YOUR_AD_CLIENT_ID" data-ad-slot="YOUR_AD_SLOT_ID"></ins> */}
-          </div>
-        </div>
-      )}
 
       <BottomNav />
     </div>
