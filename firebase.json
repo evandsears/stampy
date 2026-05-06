@@ -1,6 +1,8 @@
 {
   "hosting": {
     "public": "dist",
+    "cleanUrls": false,
+    "trailingSlash": false,
     "ignore": [
       "firebase.json",
       "**/node_modules/**"
@@ -17,14 +19,6 @@
     ],
     "headers": [
       {
-        "source": "/assetlinks.json",
-        "headers": [
-          { "key": "Content-Type", "value": "application/json" },
-          { "key": "Access-Control-Allow-Origin", "value": "*" },
-          { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
-        ]
-      },
-      {
         "source": "/.well-known/assetlinks.json",
         "headers": [
           { "key": "Content-Type", "value": "application/json" },
@@ -32,9 +26,10 @@
         ]
       },
       {
-        "source": "**",
+        "source": "/assetlinks.json",
         "headers": [
-          { "key": "Cross-Origin-Opener-Policy", "value": "same-origin-allow-popups" }
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Access-Control-Allow-Origin", "value": "*" }
         ]
       }
     ]
