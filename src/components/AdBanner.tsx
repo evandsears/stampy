@@ -19,7 +19,7 @@ export default function AdBanner({ adSlot }: AdBannerProps) {
       <ins
         className="adsbygoogle"
         style={{ display: 'inline-block', width: '320px', height: '50px' }}
-        data-ad-client="ca-pub-YOUR_PUBLISHER_ID" // Replace with your Pub ID
+        data-ad-client="ca-pub-5109081999190590" // Replace with your Pub ID
         data-ad-slot={adSlot}
       ></ins>
     </div>
