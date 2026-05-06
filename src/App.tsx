@@ -179,6 +179,17 @@ export default function App() {
                    </button>
                 )}
               </div>
+              
+              {/* Privacy Policy Link - Added for AdMob Compliance */}
+              <div className="p-2 border-t border-on-surface/5">
+                <a 
+                  href="/privacy.html" 
+                  target="_blank" 
+                  className="block w-full text-center py-2 text-[10px] text-on-surface/40 hover:text-on-surface/60 transition-colors"
+                >
+                  Privacy Policy
+                </a>
+              </div>
             </div>
           )}
         </div>
@@ -203,10 +214,8 @@ export default function App() {
 
     return (
       <div className="fixed bottom-0 left-0 right-0 max-w-md mx-auto z-40">
-        {/* The Live AdBanner now sits here, using your Ad Unit ID */}
         <AdBanner adSlot="ca-app-pub-5109081999190590/2485759813" />
 
-        {/* Your existing Navigation Bar */}
         <div className="absolute inset-0 bg-gradient-to-t from-surface via-surface/90 to-transparent pointer-events-none h-24 bottom-0 top-auto" />
         <div className="bg-surface-container/90 backdrop-blur-md border border-on-surface/5 mx-2 mb-6 rounded-full p-1.5 flex items-center justify-around shadow-xl relative z-10 text-on-surface/60 gap-1">
           <button
