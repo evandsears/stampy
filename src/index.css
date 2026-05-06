@@ -63,22 +63,38 @@
 }
 
 @keyframes holo-shine {
-  0%, 10% { background-position: 150% 150%; opacity: 0; }
-  35% { opacity: 0.8; }
-  60%, 100% { background-position: -50% -50%; opacity: 0; }
+  0% { 
+    background-position: 0% 50%; 
+    opacity: 0.2; 
+  }
+  50% { 
+    background-position: 100% 50%; 
+    opacity: 1; 
+  }
+  100% { 
+    background-position: 0% 50%; 
+    opacity: 0.2; 
+  }
 }
 
 .holo-effect {
   background: linear-gradient(
     115deg,
-    transparent 10%,
-    rgba(255, 113, 206, 0.9) 30%,
-    rgba(1, 205, 254, 0.9) 50%,
-    rgba(185, 103, 255, 0.9) 70%,
-    transparent 90%
+    rgba(255, 113, 206, 0.8) 0%,
+    rgba(1, 205, 254, 0.8) 25%,
+    rgba(5, 255, 161, 0.8) 50%,
+    rgba(185, 103, 255, 0.8) 75%,
+    rgba(255, 251, 150, 0.8) 100%
   );
   background-size: 200% 200%;
-  animation: holo-shine 4s ease-in-out infinite; /* Slower, smoother swipe */
-  mix-blend-mode: screen; /* Changed from color-dodge to be visible on black */
-  pointer-events: none;
+  animation: holo-shine 4s ease-in-out infinite;
+  
+  /* 'screen' ensures the rainbow is visible even over black 1-bit lines */
+  mix-blend-mode: screen; 
+  
+  /* ensures the shimmer doesn't block you from tapping the stamp */
+  pointer-events: none; 
+  position: absolute;
+  inset: 0;
+  z-index: 15;
 }
