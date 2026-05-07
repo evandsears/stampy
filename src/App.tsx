@@ -31,21 +31,18 @@ export default function App() {
   const pastStamps = stamps.filter(s => s.date !== todayStr).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
   useEffect(() => {
-    // 1. Instant Load: Grab whatever is on the phone RIGHT NOW
     const loadLocalData = async () => {
       const data = await getStamps();
       setStamps(data);
-      setIsLoading(false); // The spinner disappears almost instantly
+      setIsLoading(false);
     };
 
     loadLocalData();
 
-    // 2. Background Sync: Handle the user login and cloud sync quietly
     const unsub = onAuthStateChanged(auth, async (u) => {
       setUser(u);
       if (u) {
         await syncLocalStampsToCloud();
-        // 3. Update UI: If the cloud had new stamps, they'll "pop" in now
         const freshData = await getStamps();
         setStamps(freshData);
       }
@@ -55,11 +52,9 @@ export default function App() {
   }, []);
 
   const handleCreateComplete = async (imageDataUrl: string) => {
-    // Show flying animation immediately over home
     setFlyingStamp(imageDataUrl);
     setView('home');
 
-    // Add saving to background / microtask queue to not block UI thread during animation
     setTimeout(async () => {
       const currentStamps = await getStamps();
       const isHolographic = (currentStamps.length + 1) % 5 === 0;
@@ -75,7 +70,6 @@ export default function App() {
       setStamps(await getStamps());
     }, 100);
 
-    // Remove flying stamp overlay after animation
     setTimeout(() => {
       setFlyingStamp(null);
     }, 1500);
@@ -102,7 +96,7 @@ export default function App() {
     try {
       await signOut();
       setShowProfileMenu(false);
-      setStamps(await getStamps()); // Refresh to local
+      setStamps(await getStamps());
     } catch (e) {
       console.error(e);
     }
@@ -180,7 +174,6 @@ export default function App() {
                 )}
               </div>
               
-              {/* Privacy Policy Link - Added for AdMob Compliance */}
               <div className="p-2 border-t border-on-surface/5">
                 <a 
                   href="/privacy.html" 
@@ -214,7 +207,12 @@ export default function App() {
 
     return (
       <div className="fixed bottom-0 left-0 right-0 max-w-md mx-auto z-40">
-        <AdBanner adSlot="ca-app-pub-5109081999190590/2485759813" />
+        {/* This hides the ad on screens shorter than 600px (like the Sidephone) 
+          to maximize vertical space for the journal content.
+        */}
+        <div className="hidden [@media(min-height:600px)]:block">
+          <AdBanner adSlot="ca-app-pub-5109081999190590/2485759813" />
+        </div>
 
         <div className="absolute inset-0 bg-gradient-to-t from-surface via-surface/90 to-transparent pointer-events-none h-24 bottom-0 top-auto" />
         <div className="bg-surface-container/90 backdrop-blur-md border border-on-surface/5 mx-2 mb-6 rounded-full p-1.5 flex items-center justify-around shadow-xl relative z-10 text-on-surface/60 gap-1">
@@ -284,145 +282,4 @@ export default function App() {
                         <Plus className="w-5 h-5 bg-primary text-on-primary rounded-full" />
                       </div>
                     </div>
-                    <h2 className="font-serif text-3xl font-bold text-on-surface mb-3">Today's Memory</h2>
-                    <p className="text-on-surface/60 mb-10 max-w-xs">
-                      You haven't cut out a stamp today. Capture a moment before the day ends.
-                    </p>
-                    <motion.button 
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      onClick={() => setView('creating')}
-                      className="flex items-center gap-2 bg-primary text-on-primary px-8 py-4 rounded-full font-bold shadow-lg"
-                    >
-                      <Plus className="w-5 h-5" />
-                      <span>Create Stamp</span>
-                    </motion.button>
-                  </div>
-                )}
-                
-                <div className="w-full flex justify-center opacity-30 my-2">
-                  <svg width="120" height="20" viewBox="0 0 120 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M0 10 Q 15 0, 30 10 T 60 10 T 90 10 T 120 10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </div>
-                
-                <div className="w-full flex flex-col items-center gap-12">
-                  {pastStamps.map(stamp => (
-                    <StampView key={stamp.id} stamp={stamp} isToday={false} onDelete={handleDeleteStamp} />
-                  ))}
-                  
-                  {pastStamps.length === 0 && (
-                    <div className="flex flex-col items-center gap-12 w-full px-6">
-                       {[1, 2].map(i => (
-                         <div key={i} className="flex flex-col items-center w-full max-w-md">
-                           <div className="w-32 h-4 bg-surface-container rounded-full mb-6 opacity-50" />
-                           <div className="w-64 max-w-[80vw] aspect-[3/4] bg-surface-container border border-dashed border-on-surface/20 rounded-md flex items-center justify-center opacity-50">
-                             <span className="font-serif text-on-surface/40 text-sm">Past Memory</span>
-                           </div>
-                         </div>
-                       ))}
-                    </div>
-                  )}
-                </div>
-              </div>
-            </motion.div>
-          )}
-
-          {view === 'creating' && (
-            <motion.div 
-              key="creating"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              className="absolute inset-0 z-50 bg-surface"
-            >
-              <StampCreator 
-                onComplete={handleCreateComplete} 
-                onCancel={() => setView('home')} 
-              />
-            </motion.div>
-          )}
-
-          {view === 'gallery' && (
-            <motion.div 
-              key="gallery"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="h-full overflow-y-auto"
-            >
-              <Gallery 
-                stamps={stamps} 
-                onSelect={(stamp) => {
-                  setSelectedStamp(stamp);
-                  setView('view_stamp');
-                }} 
-              />
-            </motion.div>
-          )}
-
-          {view === 'view_stamp' && selectedStamp && (
-            <motion.div 
-              key="view"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="h-full overflow-y-auto pt-4 pb-32"
-            >
-              <StampView 
-                stamp={selectedStamp} 
-                isToday={selectedStamp.date === todayStr} 
-                onDelete={handleDeleteStamp}
-                initialExpanded={true}
-              />
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </main>
-
-      {flyingStamp && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: [0, 1, 1, 0] }}
-          transition={{ duration: 1.5, times: [0, 0.1, 0.8, 1], ease: "easeInOut" }}
-          className="fixed inset-0 z-[100] bg-surface/90 backdrop-blur-sm flex items-center justify-center pointer-events-none p-8"
-        >
-          <motion.div
-            animate={{ 
-              scale: [0.5, 1.1, 1, 1, 0.2], 
-              rotate: [-15, 5, 0, 0, 15], 
-              y: [100, -20, 0, 0, -400] 
-            }}
-            transition={{ duration: 1.5, times: [0, 0.2, 0.3, 0.8, 1], ease: "easeInOut" }}
-            className="relative"
-          >
-            <img 
-              src={flyingStamp} 
-              alt="Final stamp" 
-              className="max-w-[280px] w-full h-auto drop-shadow-2xl"
-            />
-            <motion.div 
-              initial={{ scale: 0, opacity: 0 }}
-              animate={{ scale: [0, 1.2, 1, 0], opacity: [0, 1, 0.8, 0] }}
-              transition={{ duration: 1.5, times: [0, 0.2, 0.8, 1] }}
-              className="absolute -top-4 -right-4 w-8 h-8 text-primary"
-            >
-              ✨
-            </motion.div>
-            <motion.div 
-              initial={{ scale: 0, opacity: 0 }}
-              animate={{ scale: [0, 1.5, 1, 0], opacity: [0, 1, 0.8, 0] }}
-              transition={{ delay: 0.1, duration: 1.4, times: [0, 0.2, 0.8, 1] }}
-              className="absolute top-10 -left-6 w-6 h-6 text-primary"
-            >
-              ✨
-            </motion.div>
-          </motion.div>
-        </motion.div>
-      )}
-
-      <BottomNav />
-    </div>
-  );
-}
+                    <h2 className="font-serif text-3xl font-bold text-
