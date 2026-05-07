@@ -16,9 +16,6 @@ export default function StampCreator({ onComplete, onCancel }: StampCreatorProps
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<any>(null);
   const [isProcessing, setIsProcessing] = useState(false);
 
-  const [isAnimatingOut, setIsAnimatingOut] = useState(false);
-  const [stampDataUrl, setStampDataUrl] = useState<string | null>(null);
-
   const onCropComplete = useCallback((_croppedArea: any, croppedAreaPixels: any) => {
     setCroppedAreaPixels(croppedAreaPixels);
   }, []);
@@ -31,7 +28,6 @@ export default function StampCreator({ onComplete, onCancel }: StampCreatorProps
         const url = reader.result?.toString();
         if (!url) return;
         
-        // Downscale large images before cropping
         const img = new Image();
         img.onload = () => {
           const MAX_DIM = 1200;
@@ -77,39 +73,48 @@ export default function StampCreator({ onComplete, onCancel }: StampCreatorProps
     }
   };
 
+  // EMPTY STATE: Photo Selector
   if (!imageSrc) {
     return (
-      <div className="flex flex-col items-center justify-center p-8 h-full min-h-[60vh] space-y-6 text-center">
-        <div className="w-24 h-24 rounded-full bg-secondary-container flex items-center justify-center mb-4">
+      <div className="flex flex-col items-center justify-center p-6 [@media(min-height:600px)]:p-8 h-full min-h-[60vh] space-y-4 [@media(min-height:600px)]:space-y-6 text-center">
+        {/* Hide icon on tiny screens */}
+        <div className="hidden [@media(min-height:600px)]:flex w-24 h-24 rounded-full bg-secondary-container items-center justify-center mb-4">
           <Camera className="w-10 h-10 text-secondary" />
         </div>
-        <h2 className="font-serif text-3xl font-bold text-on-surface">Capture Today</h2>
-        <p className="text-on-surface/60 max-w-sm mb-8">
-          Choose a photo to immortalize as today's stamp. You only get one.
+        
+        <h2 className="font-serif text-2xl [@media(min-height:600px)]:text-3xl font-bold text-on-surface">Capture Today</h2>
+        
+        <p className="text-on-surface/60 max-w-sm mb-4 [@media(min-height:600px)]:mb-8 text-sm [@media(min-height:600px)]:text-base">
+          <span className="inline [@media(min-height:600px)]:hidden">Select your daily photo.</span>
+          <span className="hidden [@media(min-height:600px)]:inline">Choose a photo to immortalize as today's stamp. You only get one.</span>
         </p>
+
         <motion.label 
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className="cursor-pointer bg-primary text-on-primary px-8 py-4 rounded-full font-bold shadow-lg inline-block"
+          className="cursor-pointer bg-primary text-on-primary px-6 py-3 [@media(min-height:600px)]:px-8 [@media(min-height:600px)]:py-4 rounded-full font-bold shadow-lg inline-block"
         >
           Select Photo
           <input type="file" accept="image/*" onChange={handleFileChange} className="hidden" />
         </motion.label>
-        <button onClick={onCancel} className="text-on-surface/40 hover:text-on-surface/60 text-sm mt-4 font-medium">
+        
+        <button onClick={onCancel} className="text-on-surface/40 hover:text-on-surface/60 text-xs [@media(min-height:600px)]:text-sm mt-4 font-medium">
           Cancel
         </button>
       </div>
     );
   }
 
+  // ACTIVE STATE: Cropper
   return (
     <div className="fixed inset-0 z-50 bg-surface flex flex-col">
-      <div className="flex items-center justify-between p-4 bg-surface/80 backdrop-blur-sm z-10 border-b border-on-surface/5">
+      {/* Thinner header on tiny screens */}
+      <div className="flex items-center justify-between p-2 [@media(min-height:600px)]:p-4 bg-surface/80 backdrop-blur-sm z-10 border-b border-on-surface/5">
         <button onClick={onCancel} className="p-2 text-on-surface/60 hover:text-on-surface transition-colors rounded-full hover:bg-on-surface/5">
           <X className="w-6 h-6" />
         </button>
-        <h2 className="font-serif font-bold text-lg text-on-surface">Position Stamp</h2>
-        <div className="w-10" /> {/* Spacer */}
+        <h2 className="font-serif font-bold text-base [@media(min-height:600px)]:text-lg text-on-surface">Position Stamp</h2>
+        <div className="w-10" />
       </div>
 
       <div className="relative flex-1 bg-on-surface/5">
@@ -117,7 +122,6 @@ export default function StampCreator({ onComplete, onCancel }: StampCreatorProps
           image={imageSrc}
           crop={crop}
           zoom={zoom}
-          // typical stamp ratio ~ 4:5
           aspect={4 / 5}
           onCropChange={setCrop}
           onZoomChange={setZoom}
@@ -129,14 +133,19 @@ export default function StampCreator({ onComplete, onCancel }: StampCreatorProps
         />
       </div>
 
-      <div className="bg-surface p-6 pb-safe flex flex-col items-center shadow-[0_-10px_40px_-5px_rgba(49,17,29,0.05)] z-10">
-        <p className="text-on-surface/50 text-sm mb-6 font-medium">Pinch to zoom, drag to move</p>
+      {/* Tighter footer on tiny screens */}
+      <div className="bg-surface p-4 [@media(min-height:600px)]:p-6 pb-safe flex flex-col items-center shadow-[0_-10px_40px_-5px_rgba(49,17,29,0.05)] z-10">
+        {/* Hide text on tiny screens */}
+        <p className="hidden [@media(min-height:600px)]:block text-on-surface/50 text-sm mb-6 font-medium">
+          Pinch to zoom, drag to move
+        </p>
+        
         <motion.button 
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={handleCut}
           disabled={isProcessing}
-          className="flex items-center gap-2 bg-secondary text-on-secondary px-10 py-4 rounded-full font-bold text-lg shadow-lg disabled:opacity-50"
+          className="flex items-center gap-2 bg-secondary text-on-secondary px-6 py-3 [@media(min-height:600px)]:px-10 [@media(min-height:600px)]:py-4 rounded-full font-bold text-base [@media(min-height:600px)]:text-lg shadow-lg disabled:opacity-50"
         >
           {isProcessing ? (
             <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: "linear" }}>
