@@ -217,4 +217,65 @@ export default function App() {
                   <div className="flex flex-col items-center justify-center text-center py-10 px-6">
                     <div className="relative w-32 h-32 mb-6 rounded-full bg-surface-container shadow-sm flex items-center justify-center group cursor-pointer" onClick={() => setView('creating')}>
                       <img src="/favicon.svg" alt="Create Stamp" className="w-16 h-16 opacity-60 group-hover:scale-110 transition-transform duration-300" />
-                      <div className="absolute bottom-4 right-4 bg-primary text-on-primary rounded-full p-1.5
+                      <div className="absolute bottom-4 right-4 bg-primary text-on-primary rounded-full p-1.5 shadow-md border-[3px] border-surface">
+                        <Plus className="w-5 h-5 bg-primary text-on-primary rounded-full" />
+                      </div>
+                    </div>
+                    <h2 className="font-serif text-3xl font-bold text-on-surface mb-3">Today's Memory</h2>
+                    <p className="text-on-surface/60 mb-10 max-w-xs">You haven't cut out a stamp today. Capture a moment before the day ends.</p>
+                    <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => setView('creating')} className="flex items-center gap-2 bg-primary text-on-primary px-8 py-4 rounded-full font-bold shadow-lg">
+                      <Plus className="w-5 h-5" /> <span>Create Stamp</span>
+                    </motion.button>
+                  </div>
+                )}
+                <div className="w-full flex justify-center opacity-30 my-2">
+                  <svg width="120" height="20" viewBox="0 0 120 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0 10 Q 15 0, 30 10 T 60 10 T 90 10 T 120 10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                  </svg>
+                </div>
+                <div className="w-full flex flex-col items-center gap-12">
+                  {pastStamps.map(stamp => ( <StampView key={stamp.id} stamp={stamp} isToday={false} onDelete={handleDeleteStamp} /> ))}
+                  {pastStamps.length === 0 && (
+                    <div className="flex flex-col items-center gap-12 w-full px-6 opacity-50">
+                       {[1, 2].map(i => (
+                         <div key={i} className="flex flex-col items-center w-full">
+                           <div className="w-32 h-4 bg-surface-container rounded-full mb-6" />
+                           <div className="w-64 aspect-[3/4] bg-surface-container border border-dashed border-on-surface/20 rounded-md flex items-center justify-center">
+                             <span className="font-serif text-on-surface/40 text-sm">Past Memory</span>
+                           </div>
+                         </div>
+                       ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </motion.div>
+          )}
+          {view === 'creating' && (
+            <motion.div key="creating" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="absolute inset-0 z-50 bg-surface">
+              <StampCreator onComplete={handleCreateComplete} onCancel={() => setView('home')} />
+            </motion.div>
+          )}
+          {view === 'gallery' && (
+            <motion.div key="gallery" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="h-full overflow-y-auto">
+              <Gallery stamps={stamps} onSelect={(stamp) => { setSelectedStamp(stamp); setView('view_stamp'); }} />
+            </motion.div>
+          )}
+          {view === 'view_stamp' && selectedStamp && (
+            <motion.div key="view" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }} className="h-full overflow-y-auto pt-4 pb-32">
+              <StampView stamp={selectedStamp} isToday={selectedStamp.date === todayStr} onDelete={handleDeleteStamp} initialExpanded={true} />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </main>
+      {flyingStamp && (
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: [0, 1, 1, 0] }} transition={{ duration: 1.5 }} className="fixed inset-0 z-[100] bg-surface/90 backdrop-blur-sm flex items-center justify-center pointer-events-none p-8">
+          <motion.div animate={{ scale: [0.5, 1.1, 1, 1, 0.2], rotate: [-15, 5, 0, 0, 15], y: [100, -20, 0, 0, -400] }} transition={{ duration: 1.5 }} className="relative">
+            <img src={flyingStamp} alt="Final stamp" className="max-w-[280px] w-full h-auto drop-shadow-2xl" />
+          </motion.div>
+        </motion.div>
+      )}
+      <BottomNav />
+    </div>
+  );
+}
