@@ -214,17 +214,34 @@ export default function App() {
             <motion.div key="home" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }} className="h-full overflow-y-auto pb-24">
               <div className="flex flex-col items-center pt-4 pb-12 gap-8">
                 {todaysStamp ? ( <StampView stamp={todaysStamp} isToday onDelete={handleDeleteStamp} /> ) : (
-                  <div className="flex flex-col items-center justify-center text-center py-10 px-6">
-                    <div className="relative w-32 h-32 mb-6 rounded-full bg-surface-container shadow-sm flex items-center justify-center group cursor-pointer" onClick={() => setView('creating')}>
+                  <div className="flex flex-col items-center justify-center text-center py-6 [@media(min-height:600px)]:py-10 px-6">
+                    <div 
+                      className="hidden [@media(min-height:600px)]:flex relative w-32 h-32 mb-6 rounded-full bg-surface-container shadow-sm items-center justify-center group cursor-pointer" 
+                      onClick={() => setView('creating')}
+                    >
                       <img src="/favicon.svg" alt="Create Stamp" className="w-16 h-16 opacity-60 group-hover:scale-110 transition-transform duration-300" />
                       <div className="absolute bottom-4 right-4 bg-primary text-on-primary rounded-full p-1.5 shadow-md border-[3px] border-surface">
                         <Plus className="w-5 h-5 bg-primary text-on-primary rounded-full" />
                       </div>
                     </div>
-                    <h2 className="font-serif text-3xl font-bold text-on-surface mb-3">Today's Memory</h2>
-                    <p className="text-on-surface/60 mb-10 max-w-xs">You haven't cut out a stamp today. Capture a moment before the day ends.</p>
-                    <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => setView('creating')} className="flex items-center gap-2 bg-primary text-on-primary px-8 py-4 rounded-full font-bold shadow-lg">
-                      <Plus className="w-5 h-5" /> <span>Create Stamp</span>
+
+                    <h2 className="font-serif text-2xl [@media(min-height:600px)]:text-3xl font-bold text-on-surface mb-2 [@media(min-height:600px)]:mb-3">
+                      Today's Memory
+                    </h2>
+                    
+                    <p className="text-on-surface/60 mb-6 [@media(min-height:600px)]:mb-10 max-w-xs text-sm [@media(min-height:600px)]:text-base">
+                      <span className="inline [@media(min-height:600px)]:hidden">Capture a moment.</span>
+                      <span className="hidden [@media(min-height:600px)]:inline">You haven't cut out a stamp today. Capture a moment before the day ends.</span>
+                    </p>
+
+                    <motion.button 
+                      whileHover={{ scale: 1.05 }} 
+                      whileTap={{ scale: 0.95 }} 
+                      onClick={() => setView('creating')} 
+                      className="flex items-center gap-2 bg-primary text-on-primary px-6 py-3 [@media(min-height:600px)]:px-8 [@media(min-height:600px)]:py-4 rounded-full font-bold shadow-lg"
+                    >
+                      <Plus className="w-5 h-5" /> 
+                      <span>Create Stamp</span>
                     </motion.button>
                   </div>
                 )}
