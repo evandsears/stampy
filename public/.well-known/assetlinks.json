@@ -3,6 +3,6 @@
       "target": {
         "namespace": "android_app",
         "package_name": "com.evandsears.stampy",
-        "sha256_cert_fingerprints": ["C1:66:11:E1:01:9B:8A:66:7F:C2:72:DA:9F:7F:D7:38:20:7B:02:1F:9F:70:1D:26:6F:A6:40:7C:08:00:93:86"]
+        "sha256_cert_fingerprints": ["18:E5:19:63:5A:C0:6B:C8:3D:A2:26:D4:8D:0A:15:5B:CC:37:E7:EF:82:F1:D9:13:FC:C2:CD:5A:D9:2E:6B:9E"]
       }
     }]
